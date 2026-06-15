@@ -1,0 +1,113 @@
+@model LoginVm
+@{
+    ViewData["Title"] = "เข้าสู่ระบบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var appLabels = new Dictionary<string, (string name, string icon)>
+    {
+        ["billing"]  = ("Billing System",  "💼"),
+        ["erp"]      = ("ERP System",       "🏢"),
+        ["ssauto"]   = ("SS Auto Service",  "🔧"),
+        ["fids"]     = ("FIDS System",      "✈️"),
+        ["tax"]      = ("Tax Record",       "📋"),
+        ["aioffice"] = ("AI Office",        "🤖"),
+    };
+
+    var appKey   = (Model.AppId ?? "").ToLower();
+    var hasApp   = appLabels.TryGetValue(appKey, out var appInfo);
+    var appName  = hasApp ? appInfo.name : "PasTech Central";
+    var appIcon  = hasApp ? appInfo.icon : "🔐";
+}
+
+<div class="ca-page">
+
+    <div class="ca-card">
+
+        @* Brand *@
+        <div class="ca-brand">
+            <div class="ca-logo">
+                <span class="ca-logo-icon">@appIcon</span>
+            </div>
+            <h1 class="ca-title">@appName</h1>
+            <p class="ca-subtitle">PasTech Central Authentication</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <div class="ca-alert" role="alert">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                @Model.Error
+            </div>
+        }
+
+        <form method="post" action="/auth/login" autocomplete="off" class="ca-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="AppId"       value="@Model.AppId" />
+            <input type="hidden" name="RedirectUri"  value="@Model.RedirectUri" />
+
+            <div class="ca-field">
+                <label class="ca-label" for="login">Username หรือ Email</label>
+                <input  class="ca-input"
+                        type="text"
+                        id="login"
+                        name="Login"
+                        value="@Model.Login"
+                        placeholder="กรอก username หรือ email"
+                        autofocus
+                        autocomplete="username" />
+            </div>
+
+            <div class="ca-field">
+                <label class="ca-label" for="password">Password</label>
+                <div class="ca-input-wrap">
+                    <input  class="ca-input"
+                            type="password"
+                            id="password"
+                            name="Password"
+                            placeholder="กรอก password"
+                            autocomplete="current-password" />
+                    <button type="button" class="ca-eye" aria-label="แสดง/ซ่อน password" onclick="togglePwd()">
+                        <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="ca-btn">
+                <span class="ca-btn-text">เข้าสู่ระบบ</span>
+                <svg class="ca-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </button>
+        </form>
+
+        <div class="ca-footer">
+            <span>© 2026 PasTech Co., Ltd.</span>
+        </div>
+
+    </div>
+
+    <div class="ca-bg">
+        <div class="ca-bg-circle ca-bg-circle--1"></div>
+        <div class="ca-bg-circle ca-bg-circle--2"></div>
+        <div class="ca-bg-circle ca-bg-circle--3"></div>
+    </div>
+</div>
+
+<script>
+function togglePwd() {
+    var inp  = document.getElementById('password');
+    var icon = document.getElementById('eye-icon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+    } else {
+        inp.type = 'password';
+        icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    }
+}
+</script>
