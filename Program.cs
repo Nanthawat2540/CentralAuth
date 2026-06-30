@@ -90,17 +90,26 @@ try
                     ctx.Fail("Token has been revoked");
             }
         };
-    })
-    .AddGoogle(opt =>
-    {
-        opt.ClientId     = config["OAuth:Google:ClientId"]     ?? "";
-        opt.ClientSecret = config["OAuth:Google:ClientSecret"] ?? "";
-    })
-    .AddMicrosoftAccount(opt =>
-    {
-        opt.ClientId     = config["OAuth:Microsoft:ClientId"]     ?? "";
-        opt.ClientSecret = config["OAuth:Microsoft:ClientSecret"] ?? "";
     });
+
+    // OAuth providers — only register if ClientId is configured
+    if (!string.IsNullOrEmpty(config["OAuth:Google:ClientId"]))
+    {
+        services.AddAuthentication().AddGoogle(opt =>
+        {
+            opt.ClientId     = config["OAuth:Google:ClientId"]!;
+            opt.ClientSecret = config["OAuth:Google:ClientSecret"]!;
+        });
+    }
+
+    if (!string.IsNullOrEmpty(config["OAuth:Microsoft:ClientId"]))
+    {
+        services.AddAuthentication().AddMicrosoftAccount(opt =>
+        {
+            opt.ClientId     = config["OAuth:Microsoft:ClientId"]!;
+            opt.ClientSecret = config["OAuth:Microsoft:ClientSecret"]!;
+        });
+    }
 
     services.AddAuthorization();
 
