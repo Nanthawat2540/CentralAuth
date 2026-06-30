@@ -19,6 +19,7 @@ public class CentralUser
     public string? DisplayName  { get; set; }
     public string  Role         { get; set; } = "user";
     public bool    IsActive     { get; set; }
+    public bool    MfaEnabled   { get; set; }
 }
 
 public class TokenPayload

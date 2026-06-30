@@ -1,0 +1,21 @@
+:root {
+  --primary:         #E9C5D4;
+  --primary-light:   #F6D6DD;
+  --primary-dark:    #b87ea0;
+  --secondary:       #B7CAE3;
+  --secondary-light: #D9E6F3;
+  --secondary-dark:  #7a9fc9;
+  --white:           #FFFFFF;
+  --text:            #2E2E2E;
+  --text-muted:      #8A8A9A;
+  --danger-bg:       rgba(224,93,124,.08);
+  --danger-border:   rgba(224,93,124,.28);
+  --danger-text:     #c0394e;
+  --radius:          20px;
+  --radius-sm:       12px;
+  --shadow:          0 8px 30px rgba(0,0,0,.08);
+  --shadow-hover:    0 20px 56px rgba(0,0,0,.13);
+  --shadow-card:     0 4px 24px rgba(183,202,227,.18), 0 1px 4px rgba(0,0,0,.04);
+  --transition:      .25s ease;
+  --font:            'IBM Plex Sans Thai', system-ui, sans-serif;
+}

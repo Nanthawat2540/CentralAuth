@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  central-auth:
+    build: .
+    container_name: central-auth
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__CentralAuth=Server=sqlexpress,1433;Database=login_pastechs;User Id=sa;Password=@Ps03032022;TrustServerCertificate=True;Encrypt=False;
+      - Jwt__Secret=pastechs-central-auth-jwt-secret-2026-shared-across-all-apps-64chars!
+      - Jwt__AccessExpireMinutes=60
+      - Jwt__RefreshExpireDays=30
+      - Jwt__ExpiresMinutes=480
+      - Redis__ConnectionString=redis:6379
+      - Auth__AllowedHosts=localhost,pastechs.com,ssauto.pastechs.com,billing.pastechs.com,erp.pastechs.com,fids.pastechs.com,tax.pastechs.com,dotnet-ai.pastechs.com,pdf.pastechs.com
+    volumes:
+      - central-auth-logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - proxy-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: central-auth-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    volumes:
+      - central-auth-redis:/data
+    networks:
+      - proxy-net
+
+volumes:
+  central-auth-logs:
+  central-auth-redis:
+
+networks:
+  proxy-net:
+    external: true

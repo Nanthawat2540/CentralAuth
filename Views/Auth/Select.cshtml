@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "เลือกระบบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var token       = ViewBag.Token as string ?? "";
+    var displayName = ViewBag.DisplayName as string ?? "ผู้ใช้";
+
+    var apps = new[]
+    {
+        new { Id = "erp",      Name = "ERP System", Icon = "🏢", Color = "#b87ea0", Url = "https://erp.pastechs.com/auth/callback" },
+        new { Id = "billing",  Name = "Billing",    Icon = "💼", Color = "#5ba4c9", Url = "https://billing.pastechs.com/auth/callback" },
+        new { Id = "ssauto",   Name = "SS Auto",    Icon = "🔧", Color = "#c49a3c", Url = "https://ssauto-admin.pastechs.com/auth_callback.php" },
+        new { Id = "fids",     Name = "FIDS",        Icon = "✈️", Color = "#3da87b", Url = "https://fids.pastechs.com/Account/Callback" },
+        new { Id = "aioffice", Name = "AI Office",  Icon = "🤖", Color = "#8b72cc", Url = "https://ai-office.pastechsystem.co.th/Auth/Callback" },
+        new { Id = "tax",      Name = "Tax Record", Icon = "📋", Color = "#8a8a9a", Url = "" },
+    };
+}
+
+<div class="ca-page">
+
+    <div class="ca-bg" aria-hidden="true">
+        <div class="ca-blob ca-blob--1"></div>
+        <div class="ca-blob ca-blob--2"></div>
+        <div class="ca-blob ca-blob--3"></div>
+    </div>
+
+    <div class="ca-card ca-card--wide">
+
+        <div class="ca-brand">
+            <div class="ca-logo">
+                <span class="ca-logo-icon">✅</span>
+            </div>
+            <h1 class="ca-title">สวัสดี, @displayName</h1>
+            <p class="ca-subtitle">เลือกระบบที่ต้องการเข้าใช้งาน</p>
+        </div>
+
+        <div class="ca-select-grid">
+            @foreach (var app in apps)
+            {
+                @if (!string.IsNullOrEmpty(app.Url))
+                {
+                    var href = $"{app.Url}?token={Uri.EscapeDataString(token)}";
+                    <a href="@href" class="ca-select-tile" style="--app-color: @app.Color">
+                        <span class="ca-select-icon">@app.Icon</span>
+                        <span class="ca-select-name">@app.Name</span>
+                        <i class="bi bi-arrow-right ca-select-arrow"></i>
+                    </a>
+                }
+                else
+                {
+                    <div class="ca-select-tile ca-select-tile--disabled">
+                        <span class="ca-select-icon">@app.Icon</span>
+                        <span class="ca-select-name">@app.Name</span>
+                        <span class="ca-select-soon">เร็วๆ นี้</span>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="ca-footer">
+            <a href="/auth/login" class="ca-logout-link">
+                <i class="bi bi-box-arrow-left"></i>
+                ออกจากระบบ
+            </a>
+        </div>
+
+    </div>
+
+</div>

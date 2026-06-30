@@ -52,8 +52,20 @@ public class AuthController(IAuthService authSvc, IConfiguration config) : Contr
             return Redirect(callbackUrl);
         }
 
-        // fallback: แสดง token (สำหรับ test)
-        return Ok(new { token, user = new { user.Id, user.Username, user.DisplayName, user.Role } });
+        // ไม่มี redirect_uri → ไปหน้าเลือก app
+        return Redirect($"/auth/select?token={Uri.EscapeDataString(token)}");
+    }
+
+    // GET /auth/select?token=...  (หน้าเลือก app หลัง login)
+    [HttpGet("/auth/select")]
+    public IActionResult Select(string? token)
+    {
+        if (string.IsNullOrEmpty(token)) return Redirect("/auth/login");
+        var payload = authSvc.VerifyToken(token);
+        if (payload is null) return Redirect("/auth/login");
+        ViewBag.Token       = token;
+        ViewBag.DisplayName = payload.DisplayName ?? payload.Username;
+        return View();
     }
 
     // GET /auth/verify?token=...  (สำหรับ app อื่นเรียก verify)

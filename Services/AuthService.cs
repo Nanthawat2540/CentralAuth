@@ -51,11 +51,11 @@ public class AuthService(IConfiguration config) : IAuthService
         var claims  = new[]
         {
             new Claim("uid",          user.Id.ToString()),
-            new Claim("username",     user.Username),
-            new Claim("email",        user.Email ?? ""),
-            new Claim("display_name", user.DisplayName ?? user.Username),
-            new Claim("role",         user.Role),
-            new Claim("app_id",       appId),
+            new Claim("username",     user.Username     ?? ""),
+            new Claim("email",        user.Email        ?? ""),
+            new Claim("display_name", user.DisplayName  ?? user.Username ?? ""),
+            new Claim("role",         user.Role         ?? "user"),
+            new Claim("app_id",       appId             ?? ""),
         };
         var token = new JwtSecurityToken(
             issuer:   "central-auth",
