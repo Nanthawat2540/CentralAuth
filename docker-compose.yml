@@ -17,6 +17,7 @@ services:
       - Auth__AllowedHosts=localhost,pastechs.com,ssauto.pastechs.com,billing.pastechs.com,erp.pastechs.com,fids.pastechs.com,tax.pastechs.com,dotnet-ai.pastechs.com,pdf.pastechs.com
     volumes:
       - central-auth-logs:/app/logs
+      - central-auth-dpkeys:/root/.aspnet/DataProtection-Keys
     depends_on:
       - redis
     networks:
@@ -35,6 +36,7 @@ services:
 volumes:
   central-auth-logs:
   central-auth-redis:
+  central-auth-dpkeys:
 
 networks:
   proxy-net:
